@@ -1,5 +1,10 @@
 // ==Montelight==
 // Tegan Brennan, Stephen Merity, Taiyo Wilson
+
+#define _USE_MATH_DEFINES
+#include <math.h> // M_PI
+#include "drand48.c"
+
 #include <cmath>
 #include <string>
 #include <iomanip>
@@ -84,6 +89,8 @@ struct Image {
   Image(unsigned int w, unsigned int h) : width(w), height(h) {
     pixels = new Vector[width * height];
     samples = new unsigned int[width * height];
+    for (int i = 0; i < width * height - 1; i++)
+        samples[i] = 0; // init to all zero
     current = new Vector[width * height];
     //raw_samples = new std::vector<Vector>[width * height];
   }
@@ -129,7 +136,8 @@ struct Image {
     f << "P3 " << width << " " << height << " " << 255 << std::endl;
     // For each pixel, write the space separated RGB values
     for (int i=0; i < width * height; i++) {
-      auto p = pixels[i] / samples[i];
+        unsigned int debug = samples[i];
+        auto p = pixels[i] / samples[i];
       unsigned int r = fmin(255, toInt(p.x)), g = fmin(255, toInt(p.y)), b = fmin(255, toInt(p.z));
       f << r << " " << g << " " << b << std::endl;
     }
@@ -339,18 +347,28 @@ struct Tracer {
 int main(int argc, const char *argv[]) {
   /////////////////////////
   // Variables to modify the process or the images
-  EMITTER_SAMPLING = true;
+  //EMITTER_SAMPLING = true;
+  EMITTER_SAMPLING = false;
+
   int w = 256, h = 256;
+  //int w = 512, h = 512;
+
   int SNAPSHOT_INTERVAL = 10;
-  unsigned int SAMPLES = 50;
+
+  unsigned int SAMPLES = 10;// 50;
+
   bool FOCUS_EFFECT = false;
   double FOCAL_LENGTH = 35;
   double APERTURE_FACTOR = 1; // ratio of original/new aperture (>1: smaller view angle, <1: larger view angle)
+
   // Initialize the image
   Image img(w, h);
+
   /////////////////////////
   // Set which scene should be raytraced
-  auto &scene = complexScene;
+  //auto& scene = complexScene;
+  auto& scene = simpleScene;
+
   Tracer tracer = Tracer(scene);
   /////////////////////////
   // Set up the camera
