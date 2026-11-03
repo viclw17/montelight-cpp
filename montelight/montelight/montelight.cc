@@ -444,7 +444,7 @@ int main(int argc, const char *argv[]) {
   EMITTER_SAMPLING = true;
   int w = 256, h = 256;
   int SNAPSHOT_INTERVAL = 100;
-    unsigned int SAMPLES = 50;//50;
+    unsigned int SAMPLES = 2;//50;
   bool FOCUS_EFFECT = false;
   double FOCAL_LENGTH = 35;
   double APERTURE_FACTOR = 1; // ratio of original/new aperture (>1: smaller view angle, <1: larger view angle)
